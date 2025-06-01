@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lixercor Psychology Payment</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Pay ₹49 to Get Access</h1>
+  <img src="upi-qr.png" alt="UPI QR Code" width="200" /><br>
+  <form id="paymentForm">
+    <input name="name" placeholder="Your Name" required /><br>
+    <input name="email" placeholder="Your Email" required /><br>
+    <input name="txnId" placeholder="Transaction ID (optional)" /><br>
+    <button type="submit">Submit</button>
+  </form>
+  <div id="msg"></div>
+  <div id="download" style="margin-top:20px; display:none;">
+    <a href="millionaire-method.pdf" download class="button">📥 Download Your E-Book</a>
+  </div>
+<script>
+document.getElementById('paymentForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const res = await fetch('/api/submit', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      name: form.name.value,
+      email: form.email.value,
+      txnId: form.txnId.value
+    })
+  });
+  const data = await res.json();
+  const msgDiv = document.getElementById('msg');
+  if (data.success) {
+    msgDiv.style.color = 'green';
+    msgDiv.innerText = data.message;
+    document.getElementById('download').style.display = 'block';
+    form.reset();
+  } else {
+    msgDiv.style.color = 'red';
+    msgDiv.innerText = data.error;
+    document.getElementById('download').style.display = 'none';
+  }
+});
+</script>
+</body>
+</html>

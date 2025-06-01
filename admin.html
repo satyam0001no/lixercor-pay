@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel</title>
+</head>
+<body>
+  <h1>Admin View</h1>
+  <button onclick="refresh()">Refresh</button>
+  <h2>Payments</h2>
+  <ul id="payments"></ul>
+  <h2>Submissions</h2>
+  <ul id="submissions"></ul>
+<script>
+async function refresh() {
+  const res = await fetch('/api/admin-data');
+  const data = await res.json();
+  document.getElementById('payments').innerHTML = data.payments.map(p =>
+    `<li>${p.date}: ${p.snippet}</li>`).join('');
+  document.getElementById('submissions').innerHTML = data.submissions.map(s =>
+    `<li>${s.date}: ${s.name} - ${s.email}</li>`).join('');
+}
+refresh();
+</script>
+</body>
+</html>
